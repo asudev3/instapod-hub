@@ -10,11 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdvertiserRouteImport } from './routes/advertiser'
 import { Route as CustomerRouteImport } from './routes/customer'
+import { Route as FranchiseeRouteImport } from './routes/franchisee'
+import { Route as AdvertiserNotificationsRouteImport } from './routes/advertiser.notifications'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as CustomerFindRouteImport } from './routes/customer.find'
 import { Route as CustomerHistoryRouteImport } from './routes/customer.history'
 import { Route as CustomerNearbyRouteImport } from './routes/customer.nearby'
+import { Route as CustomerNotificationsRouteImport } from './routes/customer.notifications'
+import { Route as FranchiseeNotificationsRouteImport } from './routes/franchisee.notifications'
 import { Route as CustomerPodsPodIdRouteImport } from './routes/customer.pods.$podId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -22,10 +27,25 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdvertiserRoute = AdvertiserRouteImport.update({
+  id: '/advertiser',
+  path: '/advertiser',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CustomerRoute = CustomerRouteImport.update({
   id: '/customer',
   path: '/customer',
   getParentRoute: () => rootRouteImport,
+} as any)
+const FranchiseeRoute = FranchiseeRouteImport.update({
+  id: '/franchisee',
+  path: '/franchisee',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdvertiserNotificationsRoute = AdvertiserNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AdvertiserRoute,
 } as any)
 const CustomerIndexRoute = CustomerIndexRouteImport.update({
   id: '/',
@@ -47,6 +67,16 @@ const CustomerNearbyRoute = CustomerNearbyRouteImport.update({
   path: '/nearby',
   getParentRoute: () => CustomerRoute,
 } as any)
+const CustomerNotificationsRoute = CustomerNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const FranchiseeNotificationsRoute = FranchiseeNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => FranchiseeRoute,
+} as any)
 const CustomerPodsPodIdRoute = CustomerPodsPodIdRouteImport.update({
   id: '/pods/$podId',
   path: '/pods/$podId',
@@ -55,28 +85,43 @@ const CustomerPodsPodIdRoute = CustomerPodsPodIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/advertiser': typeof AdvertiserRouteWithChildren
   '/customer': typeof CustomerRouteWithChildren
+  '/franchisee': typeof FranchiseeRouteWithChildren
+  '/advertiser/notifications': typeof AdvertiserNotificationsRoute
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
+  '/customer/notifications': typeof CustomerNotificationsRoute
+  '/franchisee/notifications': typeof FranchiseeNotificationsRoute
   '/customer/': typeof CustomerIndexRoute
   '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/advertiser': typeof AdvertiserRouteWithChildren
+  '/franchisee': typeof FranchiseeRouteWithChildren
+  '/advertiser/notifications': typeof AdvertiserNotificationsRoute
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
+  '/customer/notifications': typeof CustomerNotificationsRoute
+  '/franchisee/notifications': typeof FranchiseeNotificationsRoute
   '/customer': typeof CustomerIndexRoute
   '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/advertiser': typeof AdvertiserRouteWithChildren
   '/customer': typeof CustomerRouteWithChildren
+  '/franchisee': typeof FranchiseeRouteWithChildren
+  '/advertiser/notifications': typeof AdvertiserNotificationsRoute
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
+  '/customer/notifications': typeof CustomerNotificationsRoute
+  '/franchisee/notifications': typeof FranchiseeNotificationsRoute
   '/customer/': typeof CustomerIndexRoute
   '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
@@ -84,34 +129,51 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/advertiser'
     | '/customer'
+    | '/franchisee'
+    | '/advertiser/notifications'
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
+    | '/customer/notifications'
+    | '/franchisee/notifications'
     | '/customer/'
     | '/customer/pods/$podId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/advertiser'
+    | '/franchisee'
+    | '/advertiser/notifications'
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
+    | '/customer/notifications'
+    | '/franchisee/notifications'
     | '/customer'
     | '/customer/pods/$podId'
   id:
     | '__root__'
     | '/'
+    | '/advertiser'
     | '/customer'
+    | '/franchisee'
+    | '/advertiser/notifications'
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
+    | '/customer/notifications'
+    | '/franchisee/notifications'
     | '/customer/'
     | '/customer/pods/$podId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdvertiserRoute: typeof AdvertiserRouteWithChildren
   CustomerRoute: typeof CustomerRouteWithChildren
+  FranchiseeRoute: typeof FranchiseeRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -123,12 +185,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/advertiser': {
+      id: '/advertiser'
+      path: '/advertiser'
+      fullPath: '/advertiser'
+      preLoaderRoute: typeof AdvertiserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/customer': {
       id: '/customer'
       path: '/customer'
       fullPath: '/customer'
       preLoaderRoute: typeof CustomerRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/franchisee': {
+      id: '/franchisee'
+      path: '/franchisee'
+      fullPath: '/franchisee'
+      preLoaderRoute: typeof FranchiseeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/advertiser/notifications': {
+      id: '/advertiser/notifications'
+      path: '/notifications'
+      fullPath: '/advertiser/notifications'
+      preLoaderRoute: typeof AdvertiserNotificationsRouteImport
+      parentRoute: typeof AdvertiserRoute
     }
     '/customer/': {
       id: '/customer/'
@@ -158,6 +241,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerNearbyRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/customer/notifications': {
+      id: '/customer/notifications'
+      path: '/notifications'
+      fullPath: '/customer/notifications'
+      preLoaderRoute: typeof CustomerNotificationsRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/franchisee/notifications': {
+      id: '/franchisee/notifications'
+      path: '/notifications'
+      fullPath: '/franchisee/notifications'
+      preLoaderRoute: typeof FranchiseeNotificationsRouteImport
+      parentRoute: typeof FranchiseeRoute
+    }
     '/customer/pods/$podId': {
       id: '/customer/pods/$podId'
       path: '/pods/$podId'
@@ -168,10 +265,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdvertiserRouteChildren {
+  AdvertiserNotificationsRoute: typeof AdvertiserNotificationsRoute
+}
+
+const AdvertiserRouteChildren: AdvertiserRouteChildren = {
+  AdvertiserNotificationsRoute: AdvertiserNotificationsRoute,
+}
+
+const AdvertiserRouteWithChildren = AdvertiserRoute._addFileChildren(
+  AdvertiserRouteChildren,
+)
+
 interface CustomerRouteChildren {
   CustomerFindRoute: typeof CustomerFindRoute
   CustomerHistoryRoute: typeof CustomerHistoryRoute
   CustomerNearbyRoute: typeof CustomerNearbyRoute
+  CustomerNotificationsRoute: typeof CustomerNotificationsRoute
   CustomerIndexRoute: typeof CustomerIndexRoute
   CustomerPodsPodIdRoute: typeof CustomerPodsPodIdRoute
 }
@@ -180,6 +290,7 @@ const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerFindRoute: CustomerFindRoute,
   CustomerHistoryRoute: CustomerHistoryRoute,
   CustomerNearbyRoute: CustomerNearbyRoute,
+  CustomerNotificationsRoute: CustomerNotificationsRoute,
   CustomerIndexRoute: CustomerIndexRoute,
   CustomerPodsPodIdRoute: CustomerPodsPodIdRoute,
 }
@@ -188,9 +299,23 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
   CustomerRouteChildren,
 )
 
+interface FranchiseeRouteChildren {
+  FranchiseeNotificationsRoute: typeof FranchiseeNotificationsRoute
+}
+
+const FranchiseeRouteChildren: FranchiseeRouteChildren = {
+  FranchiseeNotificationsRoute: FranchiseeNotificationsRoute,
+}
+
+const FranchiseeRouteWithChildren = FranchiseeRoute._addFileChildren(
+  FranchiseeRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdvertiserRoute: AdvertiserRouteWithChildren,
   CustomerRoute: CustomerRouteWithChildren,
+  FranchiseeRoute: FranchiseeRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
