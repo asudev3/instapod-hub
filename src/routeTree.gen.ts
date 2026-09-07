@@ -15,6 +15,7 @@ import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as CustomerFindRouteImport } from './routes/customer.find'
 import { Route as CustomerHistoryRouteImport } from './routes/customer.history'
 import { Route as CustomerNearbyRouteImport } from './routes/customer.nearby'
+import { Route as CustomerNotificationsRouteImport } from './routes/customer.notifications'
 import { Route as CustomerPodsPodIdRouteImport } from './routes/customer.pods.$podId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -47,6 +48,11 @@ const CustomerNearbyRoute = CustomerNearbyRouteImport.update({
   path: '/nearby',
   getParentRoute: () => CustomerRoute,
 } as any)
+const CustomerNotificationsRoute = CustomerNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => CustomerRoute,
+} as any)
 const CustomerPodsPodIdRoute = CustomerPodsPodIdRouteImport.update({
   id: '/pods/$podId',
   path: '/pods/$podId',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
+  '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/': typeof CustomerIndexRoute
   '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
+  '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer': typeof CustomerIndexRoute
   '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
+  '/customer/notifications': typeof CustomerNotificationsRoute
   '/customer/': typeof CustomerIndexRoute
   '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
+    | '/customer/notifications'
     | '/customer/'
     | '/customer/pods/$podId'
   fileRoutesByTo: FileRoutesByTo
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
+    | '/customer/notifications'
     | '/customer'
     | '/customer/pods/$podId'
   id:
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
+    | '/customer/notifications'
     | '/customer/'
     | '/customer/pods/$podId'
   fileRoutesById: FileRoutesById
@@ -158,6 +170,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerNearbyRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/customer/notifications': {
+      id: '/customer/notifications'
+      path: '/notifications'
+      fullPath: '/customer/notifications'
+      preLoaderRoute: typeof CustomerNotificationsRouteImport
+      parentRoute: typeof CustomerRoute
+    }
     '/customer/pods/$podId': {
       id: '/customer/pods/$podId'
       path: '/pods/$podId'
@@ -172,6 +191,7 @@ interface CustomerRouteChildren {
   CustomerFindRoute: typeof CustomerFindRoute
   CustomerHistoryRoute: typeof CustomerHistoryRoute
   CustomerNearbyRoute: typeof CustomerNearbyRoute
+  CustomerNotificationsRoute: typeof CustomerNotificationsRoute
   CustomerIndexRoute: typeof CustomerIndexRoute
   CustomerPodsPodIdRoute: typeof CustomerPodsPodIdRoute
 }
@@ -180,6 +200,7 @@ const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerFindRoute: CustomerFindRoute,
   CustomerHistoryRoute: CustomerHistoryRoute,
   CustomerNearbyRoute: CustomerNearbyRoute,
+  CustomerNotificationsRoute: CustomerNotificationsRoute,
   CustomerIndexRoute: CustomerIndexRoute,
   CustomerPodsPodIdRoute: CustomerPodsPodIdRoute,
 }
