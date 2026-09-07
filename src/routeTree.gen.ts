@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdvertiserRouteImport } from './routes/advertiser'
 import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as FranchiseeRouteImport } from './routes/franchisee'
+import { Route as AdvertiserNotificationsRouteImport } from './routes/advertiser.notifications'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as CustomerFindRouteImport } from './routes/customer.find'
 import { Route as CustomerHistoryRouteImport } from './routes/customer.history'
@@ -40,6 +41,11 @@ const FranchiseeRoute = FranchiseeRouteImport.update({
   id: '/franchisee',
   path: '/franchisee',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdvertiserNotificationsRoute = AdvertiserNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AdvertiserRoute,
 } as any)
 const CustomerIndexRoute = CustomerIndexRouteImport.update({
   id: '/',
@@ -79,9 +85,10 @@ const CustomerPodsPodIdRoute = CustomerPodsPodIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/advertiser': typeof AdvertiserRoute
+  '/advertiser': typeof AdvertiserRouteWithChildren
   '/customer': typeof CustomerRouteWithChildren
   '/franchisee': typeof FranchiseeRouteWithChildren
+  '/advertiser/notifications': typeof AdvertiserNotificationsRoute
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
@@ -92,8 +99,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/advertiser': typeof AdvertiserRoute
+  '/advertiser': typeof AdvertiserRouteWithChildren
   '/franchisee': typeof FranchiseeRouteWithChildren
+  '/advertiser/notifications': typeof AdvertiserNotificationsRoute
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
@@ -105,9 +113,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/advertiser': typeof AdvertiserRoute
+  '/advertiser': typeof AdvertiserRouteWithChildren
   '/customer': typeof CustomerRouteWithChildren
   '/franchisee': typeof FranchiseeRouteWithChildren
+  '/advertiser/notifications': typeof AdvertiserNotificationsRoute
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
     | '/advertiser'
     | '/customer'
     | '/franchisee'
+    | '/advertiser/notifications'
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
     | '/'
     | '/advertiser'
     | '/franchisee'
+    | '/advertiser/notifications'
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/advertiser'
     | '/customer'
     | '/franchisee'
+    | '/advertiser/notifications'
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
@@ -159,7 +171,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdvertiserRoute: typeof AdvertiserRoute
+  AdvertiserRoute: typeof AdvertiserRouteWithChildren
   CustomerRoute: typeof CustomerRouteWithChildren
   FranchiseeRoute: typeof FranchiseeRouteWithChildren
 }
@@ -193,6 +205,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/franchisee'
       preLoaderRoute: typeof FranchiseeRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/advertiser/notifications': {
+      id: '/advertiser/notifications'
+      path: '/notifications'
+      fullPath: '/advertiser/notifications'
+      preLoaderRoute: typeof AdvertiserNotificationsRouteImport
+      parentRoute: typeof AdvertiserRoute
     }
     '/customer/': {
       id: '/customer/'
@@ -246,6 +265,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdvertiserRouteChildren {
+  AdvertiserNotificationsRoute: typeof AdvertiserNotificationsRoute
+}
+
+const AdvertiserRouteChildren: AdvertiserRouteChildren = {
+  AdvertiserNotificationsRoute: AdvertiserNotificationsRoute,
+}
+
+const AdvertiserRouteWithChildren = AdvertiserRoute._addFileChildren(
+  AdvertiserRouteChildren,
+)
+
 interface CustomerRouteChildren {
   CustomerFindRoute: typeof CustomerFindRoute
   CustomerHistoryRoute: typeof CustomerHistoryRoute
@@ -282,7 +313,7 @@ const FranchiseeRouteWithChildren = FranchiseeRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdvertiserRoute: AdvertiserRoute,
+  AdvertiserRoute: AdvertiserRouteWithChildren,
   CustomerRoute: CustomerRouteWithChildren,
   FranchiseeRoute: FranchiseeRouteWithChildren,
 }
