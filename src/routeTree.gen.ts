@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
+import { Route as CustomerFindRouteImport } from './routes/customer.find'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,28 +29,36 @@ const CustomerIndexRoute = CustomerIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CustomerRoute,
 } as any)
+const CustomerFindRoute = CustomerFindRouteImport.update({
+  id: '/find',
+  path: '/find',
+  getParentRoute: () => CustomerRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/customer': typeof CustomerRouteWithChildren
+  '/customer/find': typeof CustomerFindRoute
   '/customer/': typeof CustomerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/customer/find': typeof CustomerFindRoute
   '/customer': typeof CustomerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/customer': typeof CustomerRouteWithChildren
+  '/customer/find': typeof CustomerFindRoute
   '/customer/': typeof CustomerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/customer' | '/customer/'
+  fullPaths: '/' | '/customer' | '/customer/find' | '/customer/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/customer'
-  id: '__root__' | '/' | '/customer' | '/customer/'
+  to: '/' | '/customer/find' | '/customer'
+  id: '__root__' | '/' | '/customer' | '/customer/find' | '/customer/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -80,14 +89,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerIndexRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/customer/find': {
+      id: '/customer/find'
+      path: '/find'
+      fullPath: '/customer/find'
+      preLoaderRoute: typeof CustomerFindRouteImport
+      parentRoute: typeof CustomerRoute
+    }
   }
 }
 
 interface CustomerRouteChildren {
+  CustomerFindRoute: typeof CustomerFindRoute
   CustomerIndexRoute: typeof CustomerIndexRoute
 }
 
 const CustomerRouteChildren: CustomerRouteChildren = {
+  CustomerFindRoute: CustomerFindRoute,
   CustomerIndexRoute: CustomerIndexRoute,
 }
 
