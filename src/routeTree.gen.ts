@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CustomerRouteImport } from './routes/customer'
+import { Route as FranchiseeRouteImport } from './routes/franchisee'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as CustomerFindRouteImport } from './routes/customer.find'
 import { Route as CustomerHistoryRouteImport } from './routes/customer.history'
@@ -26,6 +27,11 @@ const IndexRoute = IndexRouteImport.update({
 const CustomerRoute = CustomerRouteImport.update({
   id: '/customer',
   path: '/customer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FranchiseeRoute = FranchiseeRouteImport.update({
+  id: '/franchisee',
+  path: '/franchisee',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomerIndexRoute = CustomerIndexRouteImport.update({
@@ -62,6 +68,7 @@ const CustomerPodsPodIdRoute = CustomerPodsPodIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/customer': typeof CustomerRouteWithChildren
+  '/franchisee': typeof FranchiseeRoute
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/franchisee': typeof FranchiseeRoute
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
@@ -82,6 +90,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/customer': typeof CustomerRouteWithChildren
+  '/franchisee': typeof FranchiseeRoute
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/customer'
+    | '/franchisee'
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
@@ -103,6 +113,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/franchisee'
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/customer'
+    | '/franchisee'
     | '/customer/find'
     | '/customer/history'
     | '/customer/nearby'
@@ -124,6 +136,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CustomerRoute: typeof CustomerRouteWithChildren
+  FranchiseeRoute: typeof FranchiseeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -140,6 +153,13 @@ declare module '@tanstack/react-router' {
       path: '/customer'
       fullPath: '/customer'
       preLoaderRoute: typeof CustomerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/franchisee': {
+      id: '/franchisee'
+      path: '/franchisee'
+      fullPath: '/franchisee'
+      preLoaderRoute: typeof FranchiseeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customer/': {
@@ -212,6 +232,7 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CustomerRoute: CustomerRouteWithChildren,
+  FranchiseeRoute: FranchiseeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
