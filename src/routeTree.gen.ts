@@ -17,6 +17,7 @@ import { Route as CustomerFindRouteImport } from './routes/customer.find'
 import { Route as CustomerHistoryRouteImport } from './routes/customer.history'
 import { Route as CustomerNearbyRouteImport } from './routes/customer.nearby'
 import { Route as CustomerNotificationsRouteImport } from './routes/customer.notifications'
+import { Route as FranchiseeNotificationsRouteImport } from './routes/franchisee.notifications'
 import { Route as CustomerPodsPodIdRouteImport } from './routes/customer.pods.$podId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -59,6 +60,11 @@ const CustomerNotificationsRoute = CustomerNotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => CustomerRoute,
 } as any)
+const FranchiseeNotificationsRoute = FranchiseeNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => FranchiseeRoute,
+} as any)
 const CustomerPodsPodIdRoute = CustomerPodsPodIdRouteImport.update({
   id: '/pods/$podId',
   path: '/pods/$podId',
@@ -68,21 +74,23 @@ const CustomerPodsPodIdRoute = CustomerPodsPodIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/customer': typeof CustomerRouteWithChildren
-  '/franchisee': typeof FranchiseeRoute
+  '/franchisee': typeof FranchiseeRouteWithChildren
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
+  '/franchisee/notifications': typeof FranchiseeNotificationsRoute
   '/customer/': typeof CustomerIndexRoute
   '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/franchisee': typeof FranchiseeRoute
+  '/franchisee': typeof FranchiseeRouteWithChildren
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
+  '/franchisee/notifications': typeof FranchiseeNotificationsRoute
   '/customer': typeof CustomerIndexRoute
   '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
@@ -90,11 +98,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/customer': typeof CustomerRouteWithChildren
-  '/franchisee': typeof FranchiseeRoute
+  '/franchisee': typeof FranchiseeRouteWithChildren
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
   '/customer/nearby': typeof CustomerNearbyRoute
   '/customer/notifications': typeof CustomerNotificationsRoute
+  '/franchisee/notifications': typeof FranchiseeNotificationsRoute
   '/customer/': typeof CustomerIndexRoute
   '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/customer/history'
     | '/customer/nearby'
     | '/customer/notifications'
+    | '/franchisee/notifications'
     | '/customer/'
     | '/customer/pods/$podId'
   fileRoutesByTo: FileRoutesByTo
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/customer/history'
     | '/customer/nearby'
     | '/customer/notifications'
+    | '/franchisee/notifications'
     | '/customer'
     | '/customer/pods/$podId'
   id:
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/customer/history'
     | '/customer/nearby'
     | '/customer/notifications'
+    | '/franchisee/notifications'
     | '/customer/'
     | '/customer/pods/$podId'
   fileRoutesById: FileRoutesById
@@ -136,7 +148,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CustomerRoute: typeof CustomerRouteWithChildren
-  FranchiseeRoute: typeof FranchiseeRoute
+  FranchiseeRoute: typeof FranchiseeRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -197,6 +209,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerNotificationsRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/franchisee/notifications': {
+      id: '/franchisee/notifications'
+      path: '/notifications'
+      fullPath: '/franchisee/notifications'
+      preLoaderRoute: typeof FranchiseeNotificationsRouteImport
+      parentRoute: typeof FranchiseeRoute
+    }
     '/customer/pods/$podId': {
       id: '/customer/pods/$podId'
       path: '/pods/$podId'
@@ -229,10 +248,22 @@ const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
   CustomerRouteChildren,
 )
 
+interface FranchiseeRouteChildren {
+  FranchiseeNotificationsRoute: typeof FranchiseeNotificationsRoute
+}
+
+const FranchiseeRouteChildren: FranchiseeRouteChildren = {
+  FranchiseeNotificationsRoute: FranchiseeNotificationsRoute,
+}
+
+const FranchiseeRouteWithChildren = FranchiseeRoute._addFileChildren(
+  FranchiseeRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CustomerRoute: CustomerRouteWithChildren,
-  FranchiseeRoute: FranchiseeRoute,
+  FranchiseeRoute: FranchiseeRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
