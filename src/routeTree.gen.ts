@@ -14,6 +14,7 @@ import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
 import { Route as CustomerFindRouteImport } from './routes/customer.find'
 import { Route as CustomerNearbyRouteImport } from './routes/customer.nearby'
+import { Route as CustomerPodsPodIdRouteImport } from './routes/customer.pods.$podId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const CustomerNearbyRoute = CustomerNearbyRouteImport.update({
   path: '/nearby',
   getParentRoute: () => CustomerRoute,
 } as any)
+const CustomerPodsPodIdRoute = CustomerPodsPodIdRouteImport.update({
+  id: '/pods/$podId',
+  path: '/pods/$podId',
+  getParentRoute: () => CustomerRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,12 +53,14 @@ export interface FileRoutesByFullPath {
   '/customer/find': typeof CustomerFindRoute
   '/customer/nearby': typeof CustomerNearbyRoute
   '/customer/': typeof CustomerIndexRoute
+  '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/customer/find': typeof CustomerFindRoute
   '/customer/nearby': typeof CustomerNearbyRoute
   '/customer': typeof CustomerIndexRoute
+  '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,13 +69,24 @@ export interface FileRoutesById {
   '/customer/find': typeof CustomerFindRoute
   '/customer/nearby': typeof CustomerNearbyRoute
   '/customer/': typeof CustomerIndexRoute
+  '/customer/pods/$podId': typeof CustomerPodsPodIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/customer' | '/customer/find' | '/customer/nearby' | '/customer/'
+    | '/'
+    | '/customer'
+    | '/customer/find'
+    | '/customer/nearby'
+    | '/customer/'
+    | '/customer/pods/$podId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/customer/find' | '/customer/nearby' | '/customer'
+  to:
+    | '/'
+    | '/customer/find'
+    | '/customer/nearby'
+    | '/customer'
+    | '/customer/pods/$podId'
   id:
     | '__root__'
     | '/'
@@ -75,6 +94,7 @@ export interface FileRouteTypes {
     | '/customer/find'
     | '/customer/nearby'
     | '/customer/'
+    | '/customer/pods/$podId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +139,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerNearbyRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/customer/pods/$podId': {
+      id: '/customer/pods/$podId'
+      path: '/pods/$podId'
+      fullPath: '/customer/pods/$podId'
+      preLoaderRoute: typeof CustomerPodsPodIdRouteImport
+      parentRoute: typeof CustomerRoute
+    }
   }
 }
 
@@ -126,12 +153,14 @@ interface CustomerRouteChildren {
   CustomerFindRoute: typeof CustomerFindRoute
   CustomerNearbyRoute: typeof CustomerNearbyRoute
   CustomerIndexRoute: typeof CustomerIndexRoute
+  CustomerPodsPodIdRoute: typeof CustomerPodsPodIdRoute
 }
 
 const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerFindRoute: CustomerFindRoute,
   CustomerNearbyRoute: CustomerNearbyRoute,
   CustomerIndexRoute: CustomerIndexRoute,
+  CustomerPodsPodIdRoute: CustomerPodsPodIdRoute,
 }
 
 const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
