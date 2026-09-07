@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdvertiserRouteImport } from './routes/advertiser'
 import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as FranchiseeRouteImport } from './routes/franchisee'
 import { Route as CustomerIndexRouteImport } from './routes/customer.index'
@@ -23,6 +24,11 @@ import { Route as CustomerPodsPodIdRouteImport } from './routes/customer.pods.$p
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdvertiserRoute = AdvertiserRouteImport.update({
+  id: '/advertiser',
+  path: '/advertiser',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomerRoute = CustomerRouteImport.update({
@@ -73,6 +79,7 @@ const CustomerPodsPodIdRoute = CustomerPodsPodIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/advertiser': typeof AdvertiserRoute
   '/customer': typeof CustomerRouteWithChildren
   '/franchisee': typeof FranchiseeRouteWithChildren
   '/customer/find': typeof CustomerFindRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/advertiser': typeof AdvertiserRoute
   '/franchisee': typeof FranchiseeRouteWithChildren
   '/customer/find': typeof CustomerFindRoute
   '/customer/history': typeof CustomerHistoryRoute
@@ -97,6 +105,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/advertiser': typeof AdvertiserRoute
   '/customer': typeof CustomerRouteWithChildren
   '/franchisee': typeof FranchiseeRouteWithChildren
   '/customer/find': typeof CustomerFindRoute
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/advertiser'
     | '/customer'
     | '/franchisee'
     | '/customer/find'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/advertiser'
     | '/franchisee'
     | '/customer/find'
     | '/customer/history'
@@ -134,6 +145,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/advertiser'
     | '/customer'
     | '/franchisee'
     | '/customer/find'
@@ -147,6 +159,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdvertiserRoute: typeof AdvertiserRoute
   CustomerRoute: typeof CustomerRouteWithChildren
   FranchiseeRoute: typeof FranchiseeRouteWithChildren
 }
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/advertiser': {
+      id: '/advertiser'
+      path: '/advertiser'
+      fullPath: '/advertiser'
+      preLoaderRoute: typeof AdvertiserRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customer': {
@@ -262,6 +282,7 @@ const FranchiseeRouteWithChildren = FranchiseeRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdvertiserRoute: AdvertiserRoute,
   CustomerRoute: CustomerRouteWithChildren,
   FranchiseeRoute: FranchiseeRouteWithChildren,
 }
