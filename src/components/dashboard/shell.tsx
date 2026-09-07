@@ -30,7 +30,7 @@ function Brand({ subtitle }: { subtitle: string }) {
   );
 }
 
-function NavLinks({ role, onNavigate }: { role: Role; onNavigate?: () => void }) {
+function NavLinks({ role, onNavigate }: { role: Role; onNavigate?: (() => void) | undefined }) {
   const config = roleConfigs[role];
   return (
     <nav className="flex flex-1 flex-col gap-6 overflow-y-auto py-2">
@@ -60,7 +60,7 @@ function NavLinks({ role, onNavigate }: { role: Role; onNavigate?: () => void })
   );
 }
 
-function SidebarBody({ role, onNavigate }: { role: Role; onNavigate?: () => void }) {
+function SidebarBody({ role, onNavigate }: { role: Role; onNavigate?: (() => void) | undefined }) {
   const config = roleConfigs[role];
   return (
     <div className="flex h-full flex-col gap-4 bg-sidebar p-4">
@@ -140,7 +140,16 @@ export function DashboardShell({ role, children }: { role: Role; children: React
             </DropdownMenu>
 
             <Button variant="ghost" size="icon" asChild aria-label="Notifications">
-              <Link to={`${config.home}/notifications`} className="relative">
+              <Link
+                to={
+                  role === "customer"
+                    ? "/customer/notifications"
+                    : role === "franchisee"
+                      ? "/franchisee/notifications"
+                      : "/advertiser/notifications"
+                }
+                className="relative"
+              >
                 <Bell className="size-5" />
                 <span className="absolute right-2 top-2 size-2 rounded-full bg-destructive" />
               </Link>
